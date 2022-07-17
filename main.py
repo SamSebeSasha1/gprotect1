@@ -617,5 +617,19 @@ async def server(ctx):
     emb.set_footer(text = f'ID: {ctx.guild.id}')
     emb.set_thumbnail(url = ctx.guild.icon_url)
     await ctx.send(embed = emb)
+     
+@client.command(
+   async def on_message(message):
+     try:
+		link = cursor.execute(f"SELECT * FROM antilink WHERE guild = {message.guild.id}")
+			guild = link.fetchall()[0][0]
+			chan = cursor.execute(f"SELECT channel FROM exceptchan WHERE id = {message.guild.id}")
+			chan = bool(message.channel.id == chan.fetchall()[0][0])
+			if(guild == message.guild.id and not message.author.guild_permissions.administrator and not chan):
+			if(re.search("https://", message.content) or re.search("http://", message.content) or re.search("discord.gg/", message.content) ):
+				await message.delete()
+				await message.author.kick(reason = "Ссылка в чате")
+	     except IndexError:
+               return
   
 client.run("OTg4OTM3NDI2MTk2MTA3Mjc0.GgrxO5.VcRJRjAWjTwIWTMroVYuPFyE4Pr-ZflLrAXZTs")
