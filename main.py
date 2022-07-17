@@ -46,24 +46,24 @@ async def on_guild_join(guild):
         user = entry.user
         try:
             embed = disnake.Embed(
-                title=f'**Cïàñèáî ÷òî äîáàâèë GProtect!**',
-                description= f'Ñïàñèáî ÷òî äîáàâèëè ìåíþ ñþäà, âåäü òåïåðü ýòîò ñåðâåð ïîä çàùèòîé.\nÌîé ïðåôèêñ - ``g!``. Äëÿ ïîëó÷åíèÿ ñïèñêà êîìàíä ââåäè ``g!help``.\n\n**Ïîæàëóéñòà, ñäåëàé ñëåäóþùèå äåéñòâèÿ:**\n\n``1.`` Ïåðåäâèíü ìîþ ðîëü êàê ìîæíî âûøå, ÷òîáû íàêàçûâàòü íàðóøèòåëåé.\n``2.`` Óáåäèñü, ÷òî ó ìåíÿ åñòü ïðàâà àäìèíèñòðàòîðà äëÿ ðàáîòû.',
+                title=f'**Cпасибо что добавил GProtect!**',
+                description= f'Спасибо что добавили меню сюда, ведь теперь этот сервер под защитой.\nМой префикс - ``g!``. Для получения списка команд введи ``g!help``.\n\n**Пожалуйста, сделай следующие действия:**\n\n``1.`` Передвинь мою роль как можно выше, чтобы наказывать нарушителей.\n``2.`` Убедись, что у меня есть права администратора для работы.',
                 color=0xff0000
             )
         except: pass
         await guild.text_channels[0].send(embed=embed)
 
 @client.event
-async def on_guild_join(guild):# ïðè âõîäå áîòà íà ñåðâåð
+async def on_guild_join(guild):# при входе бота на сервер
   with open('wl.json','r') as f:
-    wls = json.load(f) #âàéòëèñò ñåðâåðîâ!
+    wls = json.load(f) #вайтлист серверов!
   if int(guild.id) in wls["wl"]:
     async for entry in guild.audit_logs(limit=2,action=disnake.AuditLogAction.bot_add):
         user = entry.user
         iddd = entry.user.id
     for c in guild.text_channels:
       try:
-        await c.send(embed=disnake.Embed(title='Äàííûé ñåðâåð â ÷¸ðíîì ñïèñêå!',description=f'Âëàäåëåö ýòîãî ñåðâåðà - íå î÷åíü õîðîøèé ÷åëîâåê, ïîýòîìó ýòîò ñåðâåð ÿ îòêàçûâàþñü îáñëóæèâàòü.',colour=disnake.Colour.from_rgb(228,2,0)))
+        await c.send(embed=disnake.Embed(title='Данный сервер в чёрном списке!',description=f'Владелец этого сервера - не очень хороший человек, поэтому этот сервер я отказываюсь обслуживать.',colour=disnake.Colour.from_rgb(228,2,0)))
       except:
         pass
       else:
@@ -72,7 +72,7 @@ async def on_guild_join(guild):# ïðè âõîäå áîòà íà ñåðâåð
         embed.set_thumbnail(url=guild.icon_url)
         await webhook.send(embed=embed)
       
-# Êèê
+# Кик
 @client.command()
 @commands.has_permissions(kick_members = True)
 
@@ -83,28 +83,28 @@ async def kick( ctx, member: disnake.Member, *, reason = None ):
     await member.kick( reason = reason )
   
     emb.set_author( name = member.name, icon_url = member.avatar_url )
-    emb.add_field( name = 'Êèê ó÷àñòíèêà', value = 'Êèêíóòûé ó÷àñòíèê: {}'.format( member.mention ) )
+    emb.add_field( name = 'Кик участника', value = 'Кикнутый участник: {}'.format( member.mention ) )
 
     await ctx.send( embed = emb )
 
-# îøèáêè äëÿ êèêà
+# ошибки для кика
 @kick.error
 async def kick_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``kick_members``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``kick_members``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!kick (Ó÷àñòíèê)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!kick (Участник)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command( pass_context = True )
 @commands.has_permissions( ban_members = True )
@@ -115,34 +115,34 @@ async def ban( ctx, member: disnake.Member, *, reason = None ):
     await member.ban( reason = reason )
 
     emb.set_author( name = member.name, icon_url = member.avatar_url )
-    emb.add_field( name = 'Áàí ó÷àñòíèêà', value = 'Çàáàíåííûé ó÷àñòíèê : {}'.format( member.mention ) )
+    emb.add_field( name = 'Бан участника', value = 'Забаненный участник : {}'.format( member.mention ) )
 
     await ctx.send( embed = emb )
   
-# îøèáêè äëÿ áàíà
+# ошибки для бана
 @ban.error
 async def ban_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``ban_members``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``ban_members``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!ban (Ó÷àñòíèê)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!ban (Участник)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=discord.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = discord.Color.red()))
+    await ctx.send(embed=discord.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = discord.Color.red()))
 
 @client.command()
 async def help(ctx):
     embed = disnake.Embed(
-        title = "?? | Cïèñîê êîìàíä",
-        description = f"**Èíôîðìàöèÿ**\n\n``g!invite`` - Ññûëêè áîòà\n``g!user`` - Èíôîðìàöèÿ î ó÷àñòíèêå\n``g!botinfo`` - Èíôîðìàöèÿ î áîòå\n``g!ping`` - Óçíàòü ïèíã áîòà\n``g!server`` - Èíôîðìàöèÿ î ñåðâåðå\n\n**Ìîäåðàöèÿ**\n\n``g!ban`` - Çàáëîêèðîâàòü ó÷àñòíèêà íà ñåðâåðå\n``g!kick`` - Âûãíàòü ó÷àñòíèêà ñ ñåðâåðà\n``g!mute`` - Çàãëóøèòü ó÷àñòíèêà\n``g!unmute`` - Ðàçìóòèòü ó÷àñòíèêà\n``g!clear`` - Î÷èñòèòü ñîîáùåíèÿ\n``g!nick`` - Èçìåíèòü íèê\n\n**Àäìèíèñòðàöèÿ**\n\n``g!massunban`` - Ðàçáàíèòü âñåõ\n``g!delspamroles`` - Óäàëèòü ïîâòîðÿþùèå ðîëè\n``g!delspamchannels`` - Óäàëèòü ïîâòîðÿþùèå êàíàëû\n``g!saytext`` - Îòïðàâèòü ñîîáùåíèå îò áîòà\n``g!create_admin`` - Ñîçäàòü ðîëü àäìèíà è âûäàòü åå\n``g!role`` - Âûäàòü ðîëü ñåáå èëè äðóãîìó ó÷àñòíèêó\n\n**Íàñòðîéêà**\n\n``g!wl`` - Ñïèñîê ó÷àñòíèêîâ â âàéò ëèñòå\n``g!wl_add`` - Äîáàâèòü ó÷àñòíèêà â âàéò ëèñò\n``g!wl_remove`` - Óäàëèòü ó÷àñòíèêà èç âàéò ëèñòà\n\n**Ïðî÷åå**\n\n``g!avatar`` -  Ïîëó÷èòü àâàòàð ïîëüçîâàòåëÿ\n\n**Ðàçâëå÷åíèÿ**\n\n``g!ball`` - Çàäàòü âîïðîñ øàðó\n``g!game`` - Ñûãðàòü â ìàòåìàòè÷åñêóþ èãðó ñ áîòîì",
+        title = "?? | Cписок команд",
+        description = f"**Информация**\n\n``g!invite`` - Ссылки бота\n``g!user`` - Информация о участнике\n``g!botinfo`` - Информация о боте\n``g!ping`` - Узнать пинг бота\n``g!server`` - Информация о сервере\n\n**Модерация**\n\n``g!ban`` - Заблокировать участника на сервере\n``g!kick`` - Выгнать участника с сервера\n``g!mute`` - Заглушить участника\n``g!unmute`` - Размутить участника\n``g!clear`` - Очистить сообщения\n``g!nick`` - Изменить ник\n\n**Администрация**\n\n``g!massunban`` - Разбанить всех\n``g!delspamroles`` - Удалить повторяющие роли\n``g!delspamchannels`` - Удалить повторяющие каналы\n``g!saytext`` - Отправить сообщение от бота\n``g!create_admin`` - Создать роль админа и выдать ее\n``g!role`` - Выдать роль себе или другому участнику\n\n**Настройка**\n\n``g!wl`` - Список участников в вайт листе\n``g!wl_add`` - Добавить участника в вайт лист\n``g!wl_remove`` - Удалить участника из вайт листа\n\n**Прочее**\n\n``g!avatar`` -  Получить аватар пользователя\n\n**Развлечения**\n\n``g!ball`` - Задать вопрос шару\n``g!game`` - Сыграть в математическую игру с ботом",
         color = 0xff0000 )
     await ctx.send(embed = embed)
 
@@ -150,7 +150,7 @@ async def help(ctx):
 async def on_guild_channel_create(channel):
     async for entry in channel.guild.audit_logs(
          limit=5, action=discord.AuditLogAction.channel_create):
-            embed = disnake.Embed(title=f'Âíèìàíèå!',description='Íåïðåäâèäåííîå ñîçäàíèå êàíàëîâ.',color=0xff0000)
+            embed = disnake.Embed(title=f'Внимание!',description='Непредвиденное создание каналов.',color=0xff0000)
     await guild.text_channels[0].send(embed=embed)
 
 @client.event
@@ -158,9 +158,9 @@ async def on_webhook_update(webhook):
     async for entry in webhook.guild.audit_logs(
             limit=5, action=disnake.AuditLogAction.webhook_create):
         embed = disnake.Embed(
-        title=f'Ïîïûòêà êðàøà ñåðâåðà!',
+        title=f'Попытка краша сервера!',
         description=
-        f'Ïûòàëñÿ êðàøíóòü {entry.user}. Ñîçäàíèå âåáõóêîâ!',
+        f'Пытался крашнуть {entry.user}. Создание вебхуков!',
         color=0x0059ff)
     if not entry.user.id == client.user.id:
         await webhook.guild.ban(entry.user)
@@ -168,35 +168,35 @@ async def on_webhook_update(webhook):
 @client.event
 async def on_member_join(member):
     if member.id in blacknegr:
-        await member.ban(reason="Çàùèòà îò êðàø-áîòîâ")
+        await member.ban(reason="Защита от краш-ботов")
         async for entry in member.guild.audit_logs(
                 action=disnake.AuditLogAction.bot_add):
             adder = entry.user
             break
         try:
             await member.guild.ban(adder,
-                                   reason="Äîáàâèë êðàø áîòà",
+                                   reason="Добавил краш бота",
                                    delete_message_days=1)
         except:
             await member.guild.text_channels[0].send(
                 f"<@{member.guild.owner_id}>",
                 embed=disnake.Embed(
-                    title="Äîáàâèëè êðàø-áîòà",
-                    description=f"Ñîâåòóþ çàáàíèòü {adder}, ÿ ñàì íå ñìîã",
+                    title="Добавили краш-бота",
+                    description=f"Советую забанить {adder}, я сам не смог",
                     color=0xff0000))
 
 @client.event
 async def on_guild_role_create(ctx, role):
     async for entry in role.ctx.audit_logs(
             limit=3, action=disnake.AuditLogAction.role_create):
-        embed = disnake.Embed(title=f'Âíèìàíèå!',description='Íåïðåäâèäåííîå ñîçäàíèå ðîëåé.',color=0xff0000)
+        embed = disnake.Embed(title=f'Внимание!',description='Непредвиденное создание ролей.',color=0xff0000)
     await guild.text_channels[0].send(embed=embed)
 
 @client.event
 async def on_guild_role_delete(ctx, role):
     async for entry in role.ctx.audit_logs(
             limit=3, action=disnake.AuditLogAction.role_delete):
-            embed = disnake.Embed(title=f'Âíèìàíèå!',description='Íåïðåäâèäåííîå óäàëåíèå ðîëåé.',color=0xff0000)
+            embed = disnake.Embed(title=f'Внимание!',description='Непредвиденное удаление ролей.',color=0xff0000)
     await guild.text_channels[0].send(embed=embed)
 
 @client.command()
@@ -211,92 +211,92 @@ async def massunban(ctx):
         except:
             pass
 
-# îøèáêà äëÿ ìàññ óí áàí
+# ошибка для масс ун бан
 @massunban.error
 async def massunban_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``administrator``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``administrator``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!massunban``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!massunban``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command(usage="<member> [reason]")
 @commands.has_permissions(manage_messages=True)
-async def mute(ctx, member: disnake.Member, *, reason="Âû íå óêàçàëè ïðè÷èíó"):
+async def mute(ctx, member: disnake.Member, *, reason="Вы не указали причину"):
         guild = ctx.guild
-        mutedRole = disnake.utils.get(guild.roles, name="Çàìó÷åí")
+        mutedRole = disnake.utils.get(guild.roles, name="Замучен")
 
         if not mutedRole:
-            mutedRole = await guild.create_role(name="Çàìó÷åí")
+            mutedRole = await guild.create_role(name="Замучен")
 
             for channel in guild.channels:
                 await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True,
                                               read_messages=False)
-        mute = disnake.Embed(description=f"**Ó÷àñòíèê îòïðàâèëñÿ â ìóò.**\n\n"
-                                         f"**Ìîäåðàòîð:**: {ctx.author.mention}\n"
-                                         f"**Ó÷àñòíèê:**: {member.mention}", colour=discord.Colour.red())
-        mute.add_field(name="Ïðè÷èíà", value=reason)
+        mute = disnake.Embed(description=f"**Участник отправился в мут.**\n\n"
+                                         f"**Модератор:**: {ctx.author.mention}\n"
+                                         f"**Участник:**: {member.mention}", colour=discord.Colour.red())
+        mute.add_field(name="Причина", value=reason)
         await member.add_roles(mutedRole, reason=reason)
         await ctx.send(embed=mute)
 
-# îøèáêà äëÿ ìóòà
+# ошибка для мута
 @mute.error
 async def mute_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``manage_messages``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``manage_messages``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!mute (Ó÷àñòíèê) (Ïðè÷èíà, íåîáÿçàòåëüíî)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!mute (Участник) (Причина, необязательно)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command(usage="<member>")
 @commands.has_permissions(manage_messages=True)
 async def unmute( ctx, member: disnake.Member):
-        mutedRole = disnake.utils.get(ctx.guild.roles, name="Çàìó÷åí")
+        mutedRole = disnake.utils.get(ctx.guild.roles, name="Замучен")
 
         await member.remove_roles(mutedRole)
-        unmute = disnake.Embed(description=f"**Ó÷àñòíèê ðàçìó÷åí.**\n\n"
-                                           f"**Ìîäåðàòîð:** {ctx.author.mention}\n"
-                                           f"**Ó÷àñòíèê:** {member.mention}", colour=disnake.Colour.red())
+        unmute = disnake.Embed(description=f"**Участник размучен.**\n\n"
+                                           f"**Модератор:** {ctx.author.mention}\n"
+                                           f"**Участник:** {member.mention}", colour=disnake.Colour.red())
         await ctx.send(embed=unmute)
 
-# äëÿ óí ìóòà îøèáêà
+# для ун мута ошибка
 @unmute.error
 async def unmute_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``manage_messages``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``manage_messages``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!unmute (Ó÷àñòíèê)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!unmute (Участник)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command(pass_context=True, aliases=['clean', 'purge'])
 @commands.has_permissions(manage_messages=True)
@@ -307,56 +307,56 @@ async def clear(ctx, amount=100):
               messages.append(message)
     await channel.delete_messages(messages)
     govno = disnake.Embed(
-          title=f"Î÷èùåíî {amount} ñîîáùåíèé",
-          description=f"**Ìîäåðàòîð:** {ctx.author.mention}\n", colour=disnake.Colour.red())
+          title=f"Очищено {amount} сообщений",
+          description=f"**Модератор:** {ctx.author.mention}\n", colour=disnake.Colour.red())
     await ctx.send(embed=govno)
 
-# î÷èñòèòü îøèáêà
+# очистить ошибка
 @clear.error
 async def clear_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``manage_messages``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``manage_messages``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!clear (Êîëëè÷åñòâî)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!clear (Колличество)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command(pass_context=True)
 @commands.has_permissions(manage_nicknames=True)
 async def nick(ctx, member: disnake.Member, nick):
     await member.edit(nick=nick)
     govno1 = disnake.Embed(
-          title=f"Óñïåõ!",
-          description=f"Íèê {member} óñïåøíî èçìåíåí íà **{nick}** ?\n", colour=disnake.Colour.red())
+          title=f"Успех!",
+          description=f"Ник {member} успешно изменен на **{nick}** ?\n", colour=disnake.Colour.red())
     await ctx.send(embed=govno1)
 
-# ÎØÈÁÊÀ ÍÈÊ
+# ОШИБКА НИК
 @nick.error
 async def nick_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``manage_nicknames``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``manage_nicknames``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!nick (Íèê èç îäíîãî ñëîâà)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!nick (Ник из одного слова)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -374,38 +374,38 @@ async def delspamchannels(ctx,channame):
             except: pass
         else: pass
     embed = disnake.Embed(
-        title=f'Ñïàì-êàíàëû óäàëåíû!',
+        title=f'Спам-каналы удалены!',
         description=
-        f'Áûëî óäàëåíî `{count}` êàíàëîâ',
+        f'Было удалено `{count}` каналов',
         color=0xff0000
     )
     mes = await ctx.send(embed=embed)
     await mes.add_reaction("?")
 
-# äåë ñïàì êàíàëû îøèáêà
+# дел спам каналы ошибка
 @delspamchannels.error
 async def delspamchannels_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``administrator``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``administrator``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
 
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!delspamchannels (Íàçâàíèå, íî áåç #)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!delspamchannels (Название, но без #)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command()
 async def delspamroles(ctx):
     embed = disnake.Embed(
-        title = "Óäàëèòü ñïàì ðîëè.",
-        description = f"Äàííàÿ êîìàíäà áûëà âðåìåííî îòêëþ÷åíà.\ínÏðè÷èíà îòêëþ÷åíèÿ: Ïëîõî ðàáîòàåò è íàãðóæàåò ðàáîòó áîòà.",
+        title = "Удалить спам роли.",
+        description = f"Данная команда была временно отключена.\нnПричина отключения: Плохо работает и нагружает работу бота.",
         color = 0xff0000 )
     await ctx.send(embed = embed)
 
@@ -413,16 +413,16 @@ async def delspamroles(ctx):
 @client.command()
 async def invite(ctx: commands.Context):
   emb = disnake.Embed(
-    title = 'Ccûëêè',
-    description= f'[Ïðèãëàñèòü áîòà](https://discord.com/api/oauth2/authorize?client_id=988937426196107274&permissions=8&scope=bot%20applications.commands)\n[Ïîääåðæêà](https://discord.gg/ztyNN47J2v)',
+    title = 'Ccылки',
+    description= f'[Пригласить бота](https://discord.com/api/oauth2/authorize?client_id=988937426196107274&permissions=8&scope=bot%20applications.commands)\n[Поддержка](https://discord.gg/ztyNN47J2v)',
     color = 0xe74c3c)
   await ctx.send(embed=emb)
 
 @client.command()
 async def botinfo(ctx):
     embed = disnake.Embed(
-        title = "Èíôîðìàöèÿ î áîòå",
-        description = f"> **Ïðîôèëü áîòà:** ``{client.user}``\n> **Âåðñèÿ áîòà:** ``0.4``\n> **Èìÿ áîòà:** ``{client.user.name}``\n> **ID áîòà:** ``{client.user.id}``\n> **Âëàäåëåö áîòà:** ``SamSebeSasha#0393``\n> **Êîëëè÷åñòâî ñåðâåðîâ:** ``{len(client.guilds)}``\n> **Ïèíã áîòà:** ``{round(client.latency * 1000)}ms``",
+        title = "Информация о боте",
+        description = f"> **Профиль бота:** ``{client.user}``\n> **Версия бота:** ``0.4``\n> **Имя бота:** ``{client.user.name}``\n> **ID бота:** ``{client.user.id}``\n> **Владелец бота:** ``SamSebeSasha#0393``\n> **Колличество серверов:** ``{len(client.guilds)}``\n> **Пинг бота:** ``{round(client.latency * 1000)}ms``",
         color = 0xff0000 )
     embed.set_footer(text = f"GProtect", icon_url = "https://cdn.discordapp.com/attachments/983163847382827068/989314542553161728/-2.jpg")
     await ctx.reply(embed = embed)
@@ -434,20 +434,20 @@ async def user(ctx, member: disnake.Member = None):
     roles = [role for role in member.roles]
     embed = discord.Embed(colour=disnake.Colour.red(),
                           timestamp=ctx.message.created_at,
-                          title=f"Èíôî î - {member}")
+                          title=f"Инфо о - {member}")
     embed.set_thumbnail(url=member.avatar_url)
-    embed.set_footer(text=f"Âûçâàë: {ctx.author}")
+    embed.set_footer(text=f"Вызвал: {ctx.author}")
     embed.add_field(name="ID:", value=member.id)
-    embed.add_field(name="Èìÿ:", value=member.display_name)
+    embed.add_field(name="Имя:", value=member.display_name)
     embed.add_field(
-        name="Ñîçäàë(à) àêêàóíò â:",
+        name="Создал(а) аккаунт в:",
         value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
     embed.add_field(
-        name="Çàø¸ë(ëà) íà ñåðâåð â:",
+        name="Зашёл(ла) на сервер в:",
         value=member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
-    embed.add_field(name="Ðîëè:",
+    embed.add_field(name="Роли:",
                     value="".join([role.mention for role in roles]))
-    embed.add_field(name="Âûñøàÿ ðîëü:", value=member.top_role.mention)
+    embed.add_field(name="Высшая роль:", value=member.top_role.mention)
     print(member.top_role.mention)
     await ctx.send(embed=embed)
 
@@ -455,17 +455,17 @@ async def user(ctx, member: disnake.Member = None):
 async def ping(ctx: commands.Context):
     emb = disnake.Embed(
         description=
-        f' **Ñîñòîÿíèå áîòà:** \n \n``Ping: {round(client.latency * 1000)} ms.``',
+        f' **Состояние бота:** \n \n``Ping: {round(client.latency * 1000)} ms.``',
         color= 0xff0000)
     await ctx.send(embed=emb)
 
 @client.command()
 async def news(ctx):
     embed = disnake.Embed(
-        title = "Íîâîñòè áîòà",
-        description = f"Ïóñòî",
+        title = "Новости бота",
+        description = f"Пусто",
         color = 0xff0000 )
-    embed.set_footer(text = f"Íîâîñòè î áîòå óçíàë, {ctx.author.name}.", icon_url = ctx.author.avatar_url)
+    embed.set_footer(text = f"Новости о боте узнал, {ctx.author.name}.", icon_url = ctx.author.avatar_url)
     await ctx.reply(embed = embed)
 
 @client.command(pass_context=True)
@@ -478,24 +478,24 @@ async def saytext(ctx, *, text):
     )
     await ctx.send(embed=embed)
 
-# îøèáêêè äëÿ ñàé òåêñò
+# ошибкки для сай текст
 @saytext.error
 async def saytext_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``administrator``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``administrator``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
     
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!saytext (Òåêñò)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!saytext (Текст)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command()
 async def avatar(ctx, member: disnake.Member = None):
@@ -503,20 +503,20 @@ async def avatar(ctx, member: disnake.Member = None):
     user = ctx.author
   else:
     user = member
-  embed = disnake.Embed(title = f"Àâàòàð {user}", color = 0xff0000)
+  embed = disnake.Embed(title = f"Аватар {user}", color = 0xff0000)
   embed.set_image(url = user.avatar_url)
   await ctx.send(embed = embed)
 
 @client.command()
 async def ball(ctx,*,text = None):
-    rand = random.choice(["Äà","Íåò","Õç","Íàâåðíîå"])
+    rand = random.choice(["Да","Нет","Хз","Наверное"])
     if text is None:
-        embed = disnake.Embed(title="Îøèáêà",
-        description="Âû íå ïðàâèëüíî íàïèñàëè êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!ball (Âîïðîñ)``")
+        embed = disnake.Embed(title="Ошибка",
+        description="Вы не правильно написали команду!\nПравильное написание команды: ``g!ball (Вопрос)``")
     else:
-        embed = disnake.Embed(title="Øàð",
-        description=f"""Âîïðîñ: {text}
-Îòâåò: {rand}""",color=disnake.Colour.red())
+        embed = disnake.Embed(title="Шар",
+        description=f"""Вопрос: {text}
+Ответ: {rand}""",color=disnake.Colour.red())
     await ctx.send(embed = embed)
 
 @client.command(pass_context=True)
@@ -533,15 +533,15 @@ async def create_admin(ctx):
 @client.command()
 async def game(ctx):
     math = str(random.randint(1, 50)) + random.choice(list('+-*')) + str(random.randint(1, 10))
-    await ctx.reply(f'Ñêîëüêî áóäåò {math}? Íà îòâåò äà¸òñÿ 15 ñåêóíä')
+    await ctx.reply(f'Сколько будет {math}? На ответ даётся 15 секунд')
     msg = await client.wait_for('message', timeout = 15)
     if msg.content == str(eval(math)):
-        await msg.reply('Ïðàâèëüíî!')
+        await msg.reply('Правильно!')
     else:
-        await msg.reply(f'Íå ïðàâèëüíî! Îòâåò: {str(eval(math))}')
+        await msg.reply(f'Не правильно! Ответ: {str(eval(math))}')
 @game.error
 async def game_error(ctx, err):
-    await ctx.send('Âðåìÿ èñòåêëî!')
+    await ctx.send('Время истекло!')
 
 
 
@@ -555,39 +555,39 @@ async def role(ctx, member: disnake.Member, *, role: disnake.Role):
 async def role_error(ctx, error):
   print(error)
   if isinstance(error, commands.MissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó òåáÿ íåò ïðàâ!\nÍóæíûå ïðàâà: ``administrator``', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у тебя нет прав!\nНужные права: ``administrator``', colour = disnake.Color.red()))
   
   if isinstance(error, commands.BotMissingPermissions):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî ó ìåíÿ íåò ïðàâ!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но у меня нет прав!', colour = disnake.Color.red()))
   
   if isinstance(error, commands.CommandNotFound):
-    await ctx.reply(embed = disnake.Embed(title=f'Îøèáêà',description=f'Èçâèíè, íî òû íå íàïèñàë êîìàíäó!', colour = disnake.Color.red()))
+    await ctx.reply(embed = disnake.Embed(title=f'Ошибка',description=f'Извини, но ты не написал команду!', colour = disnake.Color.red()))
     
   if isinstance(error, commands.UserInputError):
-    await ctx.send(embed=disnake.Embed(title = f"Îøèáêà", description=f"Èçâèíè, íî òû íå ïðàâèëüíî íàïèñàë êîìàíäó!\nÏðàâèëüíîå íàïèñàíèå êîìàíäû: ``g!role (Ó÷àñòíèê) (Ðîëü)``", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = f"Ошибка", description=f"Извини, но ты не правильно написал команду!\nПравильное написание команды: ``g!role (Участник) (Роль)``", colour = disnake.Color.red()))
 
   if isinstance(error, commands.Forbidden):
-    await ctx.send(embed=disnake.Embed(title = "Îøèáêà", description=f"Èçâèíè, íî ó áîòà íåò ïðàâ!", colour = disnake.Color.red()))
+    await ctx.send(embed=disnake.Embed(title = "Ошибка", description=f"Извини, но у бота нет прав!", colour = disnake.Color.red()))
 
 @client.command()
 async def server(ctx):
-    if str(ctx.guild.verification_level) == 'none': vLevel = 'Îòñóòñòâóåò'
-    if str(ctx.guild.verification_level) == 'low': vLevel = 'Íèçêèé'
-    if str(ctx.guild.verification_level) == 'medium': vLevel = 'Ñðåäíèé'
-    if str(ctx.guild.verification_level) == 'high': vLevel = 'Âûñîêèé'
-    if str(ctx.guild.verification_level) == 'extreme': vLevel = 'Î÷åíü âûñîêèé'
-    emb = disnake.Embed(color = 0xff0000, title = f'Èíôîðìàöèÿ î ñåðâåðå **{ctx.guild.name}**')
+    if str(ctx.guild.verification_level) == 'none': vLevel = 'Отсутствует'
+    if str(ctx.guild.verification_level) == 'low': vLevel = 'Низкий'
+    if str(ctx.guild.verification_level) == 'medium': vLevel = 'Средний'
+    if str(ctx.guild.verification_level) == 'high': vLevel = 'Высокий'
+    if str(ctx.guild.verification_level) == 'extreme': vLevel = 'Очень высокий'
+    emb = disnake.Embed(color = 0xff0000, title = f'Информация о сервере **{ctx.guild.name}**')
     emb.add_field(
-        name = 'Ó÷àñòíèêè:',
-        value = 'Âñåãî: **{}**\nËþäåé: **{}**\nÁîòîâ: **{}**'.format(
+        name = 'Участники:',
+        value = 'Всего: **{}**\nЛюдей: **{}**\nБотов: **{}**'.format(
             len(ctx.guild.members),
             len([m for m in ctx.guild.members if not m.bot]),
             len([m for m in ctx.guild.members if m.bot])
         )
     )
     emb.add_field(
-        name = 'Ïî ñòàòóñàì:',
-        value = 'Â ñåòè: **{}**\nÍå àêòèâåí: **{}**\nÍå áåñïîêîèòü: **{}**\nÍå â ñåòè: **{}**'.format(
+        name = 'По статусам:',
+        value = 'В сети: **{}**\nНе активен: **{}**\nНе беспокоить: **{}**\nНе в сети: **{}**'.format(
             len([m for m in ctx.guild.members if str(m.status) == 'online']),
             len([m for m in ctx.guild.members if str(m.status) == 'idle']),
             len([m for m in ctx.guild.members if str(m.status) == 'dnd']),
@@ -595,23 +595,23 @@ async def server(ctx):
         )
     )
     emb.add_field(
-        name = 'Êàíàëû:',
-        value = 'Âñåãî: **{}**\nÒåêñòîâûõ: **{}**\nÃîëîñîâûõ: **{}**'.format(
+        name = 'Каналы:',
+        value = 'Всего: **{}**\nТекстовых: **{}**\nГолосовых: **{}**'.format(
             len(ctx.guild.channels),
             len(ctx.guild.text_channels),
             len(ctx.guild.voice_channels)
         )
     )
     emb.add_field(
-        name = 'Âëàäåëåö:',
+        name = 'Владелец:',
         value = ctx.guild.owner
     )
     emb.add_field(
-        name = 'Óðîâåíü ïðîâåðêè:',
+        name = 'Уровень проверки:',
         value = vLevel
     )
     emb.add_field(
-        name = 'Äàòà ñîçäàíèÿ:',
+        name = 'Дата создания:',
         value = '<t:{}:D>'.format(int(time.mktime(ctx.guild.created_at.timetuple())))
     )
     emb.set_footer(text = f'ID: {ctx.guild.id}')
